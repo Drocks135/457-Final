@@ -1,7 +1,4 @@
 import javax.swing.*;
-
-import jdk.jfr.events.ActiveRecordingEvent;
-
 import java.awt.*;
 import java.awt.event.*;
 
