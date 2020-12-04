@@ -1,8 +1,14 @@
-package com.company;
+package src.com.company;
+
+import javax.swing.SwingUtilities;
 
 public class Main {
-
-    public static void main(String[] args) {
-	// write your code here
+    public static void main(String[] args){
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                new TicTacBoard();
+            }   
+        });
     }
 }

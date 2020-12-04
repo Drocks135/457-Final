@@ -1,3 +1,5 @@
+package src.com.company;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -5,6 +7,7 @@ import java.awt.event.*;
 public class TicTacBoard extends JFrame {
 
     private Container gamePane;
+    private int boardSize = 3;
     private String currPlayer;
     private JButton [][] board;
     private boolean isWinner;
@@ -17,14 +20,14 @@ public class TicTacBoard extends JFrame {
     public TicTacBoard() {
         super();
         gamePane =  this.getContentPane();
-        gamePane.setLayout(new GridLayout(9,9));
+        gamePane.setLayout(new GridLayout(boardSize,boardSize));
         setTitle("Tic Tac Toe");
         setSize(800,800); //Resolution
         setResizable(false); //Set Resizability
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); //Control closing of application
         setVisible(true);
         currPlayer = "x";
-        board = new JButton[9][9];
+        board = new JButton[boardSize][boardSize];
         isWinner = false;
         initializeGame();
         initializeMenu();
@@ -66,22 +69,56 @@ public class TicTacBoard extends JFrame {
 
         //Add menu to the menubar
         menuBar.add(menu);
+
+        //Set the JMenuBar
+        setJMenuBar(menuBar);
     }
 
     private void resetGame(){
-        //insert code to reset the game
+        currPlayer = "x";
+        isWinner = false;
+        for(int i = 0; i < boardSize; i++){
+            for(int j = 0; j < boardSize; j++){
+                board[i][j].setText(""); //Change this to an actual icon later on when working
+            }
+        }
     }
 
     private void initializeGame(){
-        //insert code to initialize the game
+        for(int i = 0; i < boardSize; i++){
+            for(int j = 0; j < boardSize; j++){
+                JButton button = new JButton();
+                button.setFont(new Font(Font.SERIF, Font.BOLD, 30)); //Text style for the text icons
+                board[i][j] = button;
+                button.addActionListener(new ActionListener(){
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        if(((JButton)e.getSource()).getText().equals("") && isWinner == false){
+                            button.setText(currPlayer);
+                            hasWinner(); //Determine if there is a winner
+                            changePlayer();
+                        }
+                    }
+                });
+                gamePane.add(button);
+            }
+        }
     }
 
+    //Toggle between players x and o 
     private void changePlayer(){
-        //insert code to change the player
+        if(currPlayer.equals("x")){
+            currPlayer = "o";
+        }
+        else{
+            currPlayer = "x";
+        }
     }
 
+
+    //Function to determine if there is a winner or not
     private void hasWinner(){
-        //insert code for when a player has won
+        //Implement function that can check boards of all sizes for a winner
     }
 
 
