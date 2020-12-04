@@ -1,5 +1,3 @@
-package src.com.company;
-
 import javax.swing.SwingUtilities;
 
 public class Main {
