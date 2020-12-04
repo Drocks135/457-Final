@@ -5,14 +5,37 @@ import java.net.*;
 import java.util.*;
 import java.lang.*;
 
-public class ftpserver extends Thread {
+public class TicTacServer extends Thread {
         private Socket socket;
         private BufferedReader reader = null;
         private BufferedWriter writer = null;
         private static boolean DEBUG = true;
 
+        public void StartServer(){
+            ServerSocket serverSocket = null;
+            TicTacServer server;
 
-        public ftpserver(Socket socket) {
+            try{
+                serverSocket = new ServerSocket(1200);
+            } catch (IOException e){
+                System.err.println("Could not listen on port: 1200.");
+                System.exit(-1);
+            }
+
+            while (true)
+            {
+                try {
+                    server = new TicTacServer(serverSocket.accept());
+                    Thread t = new Thread(server);
+                    t.start();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        public TicTacServer(Socket socket) {
             this.socket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
