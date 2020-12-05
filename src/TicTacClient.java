@@ -68,6 +68,9 @@ public class TicTacClient {
     public void Disconnect(){
         try {
             sendLine("Close");
+            socket.close();
+            writer.close();
+            reader.close();
         } catch (Exception e) {
             System.out.println("There was an error closing the connection to the server");
         }
