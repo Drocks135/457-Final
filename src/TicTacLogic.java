@@ -15,7 +15,7 @@ public class TicTacLogic {
 
     public static int currentState;
     public static int currentPlayer;
-    public static int currntRow, currentCol;
+    public static int currentRow, currentCol;
 
     public static Scanner in = new Scanner(System.in);
 
@@ -23,7 +23,7 @@ public class TicTacLogic {
         initGame();
         do {
             playerMove(currentPlayer);
-            updateGame(currentPlayer, currntRow, currentCol);
+            updateGame(currentPlayer, currentRow, currentCol);
             if (currentState == X_WON) {
                 System.out.println("X won!");
             } else if (currentState == O_WON) {

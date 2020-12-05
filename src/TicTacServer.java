@@ -5,14 +5,37 @@ import java.net.*;
 import java.util.*;
 import java.lang.*;
 
-public class ftpserver extends Thread {
+public class TicTacServer extends Thread {
         private Socket socket;
         private BufferedReader reader = null;
         private BufferedWriter writer = null;
         private static boolean DEBUG = true;
 
+        public void StartServer(){
+            ServerSocket serverSocket = null;
+            TicTacServer server;
 
-        public ftpserver(Socket socket) {
+            try{
+                serverSocket = new ServerSocket(1200);
+            } catch (IOException e){
+                System.err.println("Could not listen on port: 1200.");
+                System.exit(-1);
+            }
+
+            while (true)
+            {
+                try {
+                    server = new TicTacServer(serverSocket.accept());
+                    Thread t = new Thread(server);
+                    t.start();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        public TicTacServer(Socket socket) {
             this.socket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -28,7 +51,6 @@ public class ftpserver extends Thread {
             System.out.println("User connected" + socket.getInetAddress());
             try {
                 processRequest();
-
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -37,30 +59,38 @@ public class ftpserver extends Thread {
 
 
         private void processRequest() throws Exception {
-            String fromClient;
             String clientCommand;
 
             while (true) {
+                clientCommand = readLine();
 
-                System.out.println("User connected" + socket.getInetAddress());
-                fromClient = readLine();
-                StringTokenizer tokens = new StringTokenizer(fromClient);
-
-                tokens.nextToken(); //Consume the first token which is the port
-                clientCommand = tokens.nextToken();
-
-                if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"));
-                    MakeMove(tokens);
+                if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"))
+                    MakeMove(clientCommand);
+                if(clientCommand.matches("(Close)"))
+                    Disconnect();
             }
         }
 
-        private void MakeMove(StringTokenizer command){
+        private void Disconnect(){
             try {
-                System.out.println(command);
-                sendLine("Success");
+                socket.close();
+                writer.close();
+                reader.close();
+            } catch (Exception e) {
+                System.out.println("There was a problem disconnecting from client");
+            }
+        }
+
+        public TicTacMove MakeMove(String command){
+            TicTacMove move = null;
+            try {
+                StringTokenizer tokenCommand = new StringTokenizer(command);
+                tokenCommand.nextToken(); //Consume the move token
+                move = new TicTacMove(tokenCommand.nextToken(), tokenCommand.nextToken());
             } catch (Exception e){
                 System.out.println("Fail");
             }
+            return move;
         }
 
     private void sendLine(String line) throws IOException {
