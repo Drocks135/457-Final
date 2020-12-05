@@ -81,13 +81,16 @@ public class TicTacServer extends Thread {
             }
         }
 
-        private void MakeMove(String command){
+        public TicTacMove MakeMove(String command){
+            TicTacMove move = null;
             try {
-                System.out.println(command);
-                sendLine("Success");
+                StringTokenizer tokenCommand = new StringTokenizer(command);
+                tokenCommand.nextToken(); //Consume the move token
+                move = new TicTacMove(tokenCommand.nextToken(), tokenCommand.nextToken());
             } catch (Exception e){
                 System.out.println("Fail");
             }
+            return move;
         }
 
     private void sendLine(String line) throws IOException {
