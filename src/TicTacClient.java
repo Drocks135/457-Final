@@ -53,8 +53,7 @@ public class TicTacClient {
         try {
             String StringMove = readLine();
             StringTokenizer TokenizedMove = new StringTokenizer(StringMove);
-            move = new TicTacMove( Boolean.parseBoolean(TokenizedMove.nextToken()),
-                   Integer.parseInt(TokenizedMove.nextToken()));
+            move = new TicTacMove(TokenizedMove.nextToken(), TokenizedMove.nextToken());
         } catch (Exception e){
             e.printStackTrace();
         }
