@@ -51,7 +51,6 @@ public class TicTacServer extends Thread {
             System.out.println("User connected" + socket.getInetAddress());
             try {
                 processRequest();
-
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -60,24 +59,29 @@ public class TicTacServer extends Thread {
 
 
         private void processRequest() throws Exception {
-            String fromClient;
             String clientCommand;
 
             while (true) {
+                clientCommand = readLine();
 
-                System.out.println("User connected" + socket.getInetAddress());
-                fromClient = readLine();
-                StringTokenizer tokens = new StringTokenizer(fromClient);
-
-                tokens.nextToken(); //Consume the first token which is the port
-                clientCommand = tokens.nextToken();
-
-                if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"));
-                    MakeMove(tokens);
+                if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"))
+                    MakeMove(clientCommand);
+                if(clientCommand.matches("(Close)"))
+                    Disconnect();
             }
         }
 
-        private void MakeMove(StringTokenizer command){
+        private void Disconnect(){
+            try {
+                socket.close();
+                writer.close();
+                reader.close();
+            } catch (Exception e) {
+                System.out.println("There was a problem disconnecting from client");
+            }
+        }
+
+        private void MakeMove(String command){
             try {
                 System.out.println(command);
                 sendLine("Success");
