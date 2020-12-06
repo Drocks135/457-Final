@@ -9,11 +9,13 @@ public class TicTacServer extends Thread {
         private Socket socket;
         private BufferedReader reader = null;
         private BufferedWriter writer = null;
+        private TicTacServerHandler serverHandler;
         private static boolean DEBUG = true;
 
-        public void StartServer(int portNumber){
+        public void StartServer(int portNumber, TicTacServerHandler serverHandler){
             ServerSocket serverSocket = null;
             TicTacServer server;
+            this.serverHandler = serverHandler;
 
             try{
                 serverSocket = new ServerSocket(portNumber);
@@ -87,19 +89,25 @@ public class TicTacServer extends Thread {
             }
         }
 
-        public TicTacMove ReceiveMove(String command){
+        public void ReceiveMove(String command){
             TicTacMove move = null;
             try {
                 StringTokenizer tokenCommand = new StringTokenizer(command);
                 tokenCommand.nextToken(); //Consume the move token
-                move = new TicTacMove(tokenCommand.nextToken(), tokenCommand.nextToken());
+                move = new TicTacMove(tokenCommand.nextToken(), tokenCommand.nextToken(), tokenCommand.nextToken());
             } catch (Exception e){
                 System.out.println("Fail");
             }
-            return move;
+            serverHandler.ReceiveMove(move);
         }
 
-        public void SendMove()
+        public void SendMove(TicTacMove move){
+            try {
+                sendLine("move: " + move.GetPlayer() + " " + move.GetRow() + " " + move.GetCol());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 
 
 

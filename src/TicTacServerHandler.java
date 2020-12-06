@@ -1,4 +1,4 @@
-public class TicTacServerHandler {
+public class TicTacServerHandler implements TicTacHandler{
     private TicTacBoard board;
     private TicTacServer server;
     private TicTacLogic game;
@@ -11,12 +11,17 @@ public class TicTacServerHandler {
     }
 
     private void StartServer(int port){
-        server.StartServer(port);
+        server.StartServer(port, this);
     }
 
-    private void MakeMove(TicTacMove move){
+    public void ReceiveMove(TicTacMove move){
         board.MakeMove(move);
         game.MakeMove(move);
-        server.MakeMove(move);
+    }
+
+    public void Reset(){
+        board.resetGame();
+        game.ResetBoard();
+        ///server.reset todo: add server reset
     }
 }

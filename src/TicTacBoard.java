@@ -15,7 +15,7 @@ public class TicTacBoard extends JFrame {
     private JMenuItem newGame;
     private JMenuItem connectGame;
 
-    public TicTacBoard() {
+    public TicTacBoard(TicTacServerHandler serverHandler) {
         super();
         gamePane =  this.getContentPane();
         gamePane.setLayout(new GridLayout(boardSize,boardSize));
@@ -76,7 +76,7 @@ public class TicTacBoard extends JFrame {
         setJMenuBar(menuBar);
     }
 
-    private void resetGame(){
+    public void resetGame(){
         currPlayer = "x";
         isWinner = false;
         for(int i = 0; i < boardSize; i++){
