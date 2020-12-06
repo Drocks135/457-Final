@@ -11,12 +11,12 @@ public class TicTacServer extends Thread {
         private BufferedWriter writer = null;
         private static boolean DEBUG = true;
 
-        public void StartServer(){
+        public void StartServer(int portNumber){
             ServerSocket serverSocket = null;
             TicTacServer server;
 
             try{
-                serverSocket = new ServerSocket(1200);
+                serverSocket = new ServerSocket(portNumber);
             } catch (IOException e){
                 System.err.println("Could not listen on port: 1200.");
                 System.exit(-1);
@@ -68,7 +68,13 @@ public class TicTacServer extends Thread {
                     MakeMove(clientCommand);
                 if(clientCommand.matches("(Close)"))
                     Disconnect();
+                if(clientCommand.matches("(Reset)"))
+                    ResetGame();
             }
+        }
+
+        public void ResetGame(){
+
         }
 
         private void Disconnect(){
