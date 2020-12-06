@@ -31,6 +31,10 @@ public class TicTacBoard extends JFrame {
         initializeMenu();
     }
 
+    public void MakeMove(TicTacMove move){
+
+    }
+
     private void initializeMenu(){
         menuBar = new JMenuBar();
         menu = new JMenu("File");
