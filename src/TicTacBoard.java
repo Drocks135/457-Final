@@ -14,8 +14,9 @@ public class TicTacBoard extends JFrame {
     private JMenuItem quitGame;
     private JMenuItem newGame;
     private JMenuItem connectGame;
+    private TicTacHandler handler;
 
-    public TicTacBoard(TicTacServerHandler serverHandler) {
+    public TicTacBoard(TicTacHandler handler) {
         super();
         gamePane =  this.getContentPane();
         gamePane.setLayout(new GridLayout(boardSize,boardSize));
@@ -29,6 +30,7 @@ public class TicTacBoard extends JFrame {
         isWinner = false;
         initializeGame();
         initializeMenu();
+        this.handler = handler;
     }
 
     public void MakeMove(TicTacMove move){
