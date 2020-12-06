@@ -12,9 +12,8 @@ public class TicTacServer extends Thread {
         private TicTacServerHandler serverHandler;
         private static boolean DEBUG = true;
 
-        public void StartServer(int portNumber, TicTacServerHandler serverHandler){
+        public void StartServer(int portNumber, TicTacServerHandler serverHandler, TicTacServer server) throws Exception{
             ServerSocket serverSocket = null;
-            TicTacServer server;
             this.serverHandler = serverHandler;
 
             try{
@@ -24,20 +23,18 @@ public class TicTacServer extends Thread {
                 System.exit(-1);
             }
 
-            while (true)
-            {
-                try {
-                    server = new TicTacServer(serverSocket.accept());
-                    Thread t = new Thread(server);
-                    t.start();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
+            server = new TicTacServer(serverSocket.accept());
+            Thread t = new Thread(server);
+            t.start();
+
         }
 
 
-        public TicTacServer(Socket socket) {
+        public TicTacServer(){
+
+        }
+
+        private TicTacServer(Socket socket) {
             this.socket = socket;
             try {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

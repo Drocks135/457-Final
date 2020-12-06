@@ -2,7 +2,7 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args){
-
+        TicTacServerHandler serverHandler;
 
 
         Object[] buttons = {"Host", "Connect"};
@@ -33,7 +33,8 @@ public class Main {
                 //see if the port number provided is a valid port
                 try {
                     port = Integer.parseInt(portString);
-                } catch (NumberFormatException e) {
+                    serverHandler = new TicTacServerHandler(port);
+                } catch (Exception e) {
                     //if not throw an error joption and ensure that the loop continues
                     JOptionPane.showMessageDialog(null, "Invalid Port Number. Try again.", "WARNING",
                             JOptionPane.WARNING_MESSAGE);
@@ -44,70 +45,74 @@ public class Main {
 
             }
 
-            //TicTacServerHandler serverHandler = new TicTacServerHandler(port);
 
         }
 
-        else{
+        else {
+            Boolean connected = false;
+            while (!connected) {
+                //for client we also need to know the IP
+                String IPString = "";
 
-            //for client we also need to know the IP
-            String IPString = "";
+                boolean valid = false;
 
-            boolean valid = false;
+                //same logic as before
+                while (!valid) {
 
-            //same logic as before
-            while(!valid){
-
-                valid = true;
-
-                IPString = JOptionPane.showInputDialog("Enter host IP: ");
-
-                System.out.println("Host IP: " + IPString);
-
-                //IP only needs to be not null
-                if(IPString.length() >= 0){
                     valid = true;
+
+                    IPString = JOptionPane.showInputDialog("Enter host IP: ");
+
+                    System.out.println("Host IP: " + IPString);
+
+                    //IP only needs to be not null
+                    if (IPString.length() >= 0) {
+                        valid = true;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Invalid IP. Please try again.", "WARNING",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+
+
                 }
-                else{
-                    JOptionPane.showMessageDialog(null, "Invalid IP. Please try again.", "WARNING",
-                            JOptionPane.WARNING_MESSAGE);
+
+                //valid boolean is reset
+                valid = false;
+
+                //client port logic is handled the same as the host
+                while (!valid) {
+
+                    valid = true;
+
+                    portString = JOptionPane.showInputDialog("Enter host Port: ");
+
+                    System.out.println("Host port: " + portString);
+
+                    try {
+                        port = Integer.parseInt(portString);
+                    } catch (NumberFormatException e) {
+
+                        JOptionPane.showMessageDialog(null, "Invalid Port Number. Please try again.", "WARNING",
+                                JOptionPane.WARNING_MESSAGE);
+                        valid = false;
+                    }
+
+
                 }
 
-
-            }
-
-            //valid boolean is reset
-            valid = false;
-
-            //client port logic is handled the same as the host
-            while(!valid){
-
-                valid = true;
-
-                portString = JOptionPane.showInputDialog("Enter host Port: ");
-
-                System.out.println("Host port: " + portString);
+                TicTacClientHandler clientHandler = new TicTacClientHandler();
 
                 try {
-                    port = Integer.parseInt(portString);
-                } catch (NumberFormatException e) {
-
-                    JOptionPane.showMessageDialog(null, "Invalid Port Number. Please try again.", "WARNING",
+                    clientHandler.ConnectToServer(IPString, port);
+                    connected = true;
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Could not connect, please verify host name and port", "WARNING",
                             JOptionPane.WARNING_MESSAGE);
-                    valid = false;
                 }
 
 
             }
-
-            //TicTacClientHandler clientHandler = new TicTacClientHandler(IPString, port);
-
-
         }
-
-
-
-
     }
 
 }

@@ -1,16 +1,56 @@
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
-public class TicTacClient {
+public class TicTacClient extends Thread {
     private Socket socket;
     private BufferedReader reader;
     private BufferedWriter writer;
+    TicTacClientHandler clientHandler;
 
     private static boolean DEBUG = false; //Enable this to see incoming and outgoing data in terminal
 
-    public void StartClient(){
-        socket = new Socket();
+    public void StartClient(int portNumber, String HostName, TicTacClientHandler clientHandler)throws Exception{
+       // TicTacClient client;
+
+        EstablishConnection(HostName, portNumber);
+        //client = new TicTacClient(clientHandler);
+        Thread t = new Thread(this);
+        t.start();
+    }
+
+    public TicTacClient(){
+
+    }
+
+    private TicTacClient(TicTacClientHandler clientHandler){
+        this.clientHandler = clientHandler;
+    }
+
+    private void processRequest() throws Exception {
+        String clientCommand;
+
+        while (true) {
+            clientCommand = readLine();
+
+            if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"))
+                ReceiveMove(clientCommand);
+            if(clientCommand.matches("(Close)"))
+                Disconnect();
+            if(clientCommand.matches("(Reset)"))
+                ResetGame();
+        }
+    }
+
+    public void run() {
+        System.out.println("User connected" + socket.getInetAddress());
+        try {
+            processRequest();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
     }
 
     /******************************************************************
@@ -18,17 +58,14 @@ public class TicTacClient {
      * @param serverName: The name of the server you want to connect to
      * @param  connectionPort: The port you want to connect at
      *****************************************************************/
-    public void EstablishConnection(String serverName, int connectionPort){
-        try {
+    public void EstablishConnection(String serverName, int connectionPort) throws Exception{
             socket = new Socket(serverName, connectionPort);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new BufferedWriter(
                     new OutputStreamWriter(socket.getOutputStream()));
 
             System.out.println("You are connected to " + serverName);
-        } catch (Exception e){
-            System.out.println("There was a problem connecting to the server");
-        }
+
     }
 
     /*****************************************************************
@@ -36,9 +73,9 @@ public class TicTacClient {
      * @param move: A TicTacMove that has the player information and
      *            move information
      *****************************************************************/
-    public void MakeMove(TicTacMove move){
+    public void SendMove(TicTacMove move){
         try {
-            sendLine("move: " + move.GetPlayer() + " " + move.GetMove());
+            sendLine("move: " + move.GetPlayer() + " " + move.GetRow() + " " + move.GetCol());
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -48,16 +85,20 @@ public class TicTacClient {
      * This method recieves a move from the server and returns a
      * TicTacMove that can be processed by the game logic
      *****************************************************************/
-    public TicTacMove ReceiveMove(){
+    public void ReceiveMove(String command){
         TicTacMove move = null;
         try {
-            String StringMove = readLine();
-            StringTokenizer TokenizedMove = new StringTokenizer(StringMove);
-            move = new TicTacMove(TokenizedMove.nextToken(), TokenizedMove.nextToken());
+            StringTokenizer tokenCommand = new StringTokenizer(command);
+            tokenCommand.nextToken(); //Consume the move token
+            move = new TicTacMove(tokenCommand.nextToken(), tokenCommand.nextToken(), tokenCommand.nextToken());
         } catch (Exception e){
-            e.printStackTrace();
+            System.out.println("Fail");
         }
-        return move;
+        clientHandler.ReceiveMove(move);
+    }
+
+    public void ResetGame(){
+
     }
 
     /*****************************************************************
@@ -91,6 +132,8 @@ public class TicTacClient {
 
     private String readLine() throws IOException {
         String line = reader.readLine();
+        while(line == null)
+            line = reader.readLine();
         if (DEBUG) {
             System.out.println("< " + line);
         }

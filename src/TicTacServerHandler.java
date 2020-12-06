@@ -7,16 +7,15 @@ public class TicTacServerHandler implements TicTacHandler{
     private TicTacLogic game;
     private Socket socket;
 
-    public TicTacServerHandler(int port) throws IOException {
-        this.socket = new Socket("LocalHost", port);
-        this.server = new TicTacServer(socket);
+    public TicTacServerHandler(int port) throws Exception {
+        this.server = new TicTacServer();
         this.game = new TicTacLogic(3, true);
         this.board = new TicTacBoard(this);
         StartServer(port);
     }
 
-    private void StartServer(int port){
-        server.StartServer(port, this);
+    private void StartServer(int port) throws Exception{
+        server.StartServer(port, this, server);
     }
 
     public void ReceiveMove(TicTacMove move){
