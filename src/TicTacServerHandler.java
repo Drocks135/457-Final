@@ -15,6 +15,8 @@ public class TicTacServerHandler {
     }
 
     private void MakeMove(TicTacMove move){
-
+        board.MakeMove(move);
+        game.MakeMove(move);
+        server.MakeMove(move);
     }
 }

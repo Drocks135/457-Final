@@ -65,7 +65,7 @@ public class TicTacServer extends Thread {
                 clientCommand = readLine();
 
                 if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"))
-                    MakeMove(clientCommand);
+                    ReceiveMove(clientCommand);
                 if(clientCommand.matches("(Close)"))
                     Disconnect();
                 if(clientCommand.matches("(Reset)"))
@@ -87,7 +87,7 @@ public class TicTacServer extends Thread {
             }
         }
 
-        public TicTacMove MakeMove(String command){
+        public TicTacMove ReceiveMove(String command){
             TicTacMove move = null;
             try {
                 StringTokenizer tokenCommand = new StringTokenizer(command);
@@ -98,6 +98,10 @@ public class TicTacServer extends Thread {
             }
             return move;
         }
+
+        public void SendMove()
+
+
 
     private void sendLine(String line) throws IOException {
         if (socket == null) {
