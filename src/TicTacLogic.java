@@ -9,7 +9,7 @@ public class TicTacLogic {
     }
 
     public void MakeMove(TicTacMove move){
-
+        GameBoard[move.GetRow()][move.GetCol()] =  move.GetPlayer() ? 1 : 0;
     }
 
     public void ResetBoard(){
