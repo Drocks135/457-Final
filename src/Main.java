@@ -44,7 +44,7 @@ public class Main {
 
             }
 
-            TicTacServerHandler serverHandler = new TicTacServerHandler(port);
+            //TicTacServerHandler serverHandler = new TicTacServerHandler(port);
 
         }
 
@@ -100,7 +100,7 @@ public class Main {
 
             }
 
-            TicTacClientHandler clientHandler = new TicTacClientHandler(IPString, port);
+            //TicTacClientHandler clientHandler = new TicTacClientHandler(IPString, port);
 
 
         }
