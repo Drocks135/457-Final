@@ -3,10 +3,14 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class TicTacBoard extends JFrame {
+    
+    //Get the icon images for both the o and x peices of the board
+    ImageIcon xIcon = new ImageIcon(new ImageIcon("src/icons/xplayer.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+    ImageIcon oIcon = new ImageIcon(new ImageIcon("src/icons/oplayer.png").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
     private Container gamePane;
     private int boardSize = 3;
-    private String currPlayer;
+    private ImageIcon currPlayer;
     private JButton [][] board;
     private boolean isWinner;
     private JMenuBar menuBar;
@@ -24,7 +28,7 @@ public class TicTacBoard extends JFrame {
         setResizable(false); //Set Resizability
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); //Control closing of application
         setVisible(true);
-        currPlayer = "x";
+        currPlayer = xIcon;
         board = new JButton[boardSize][boardSize];
         isWinner = false;
         initializeGame();
@@ -73,7 +77,7 @@ public class TicTacBoard extends JFrame {
     }
 
     private void resetGame(){
-        currPlayer = "x";
+        currPlayer = xIcon;
         isWinner = false;
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
@@ -91,8 +95,8 @@ public class TicTacBoard extends JFrame {
                 button.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        if(((JButton)e.getSource()).getText().equals("") && isWinner == false){
-                            button.setText(currPlayer);
+                        if(((JButton)e.getSource()).getIcon() == null && isWinner == false){
+                            button.setIcon(currPlayer);
                             hasWinner(); //Determine if there is a winner
                             changePlayer();
                         }
@@ -105,11 +109,11 @@ public class TicTacBoard extends JFrame {
 
     //Toggle between players x and o 
     private void changePlayer(){
-        if(currPlayer.equals("x")){
-            currPlayer = "o";
+        if(currPlayer.equals(xIcon)){
+            currPlayer = oIcon;
         }
         else{
-            currPlayer = "x";
+            currPlayer = xIcon;
         }
     }
 
