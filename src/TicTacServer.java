@@ -18,13 +18,18 @@ public class TicTacServer extends Thread {
 
             try{
                 serverSocket = new ServerSocket(portNumber);
+                this.socket = serverSocket.accept();
+                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                writer = new BufferedWriter(
+                        new OutputStreamWriter(socket.getOutputStream()));
             } catch (IOException e){
                 System.err.println("Could not listen on port: 1200.");
                 System.exit(-1);
             }
 
-            server = new TicTacServer(serverSocket.accept());
-            Thread t = new Thread(server);
+
+            //server = new TicTacServer(serverSocket.accept());
+            Thread t = new Thread(this);
             t.start();
 
         }
@@ -32,17 +37,6 @@ public class TicTacServer extends Thread {
 
         public TicTacServer(){
 
-        }
-
-        private TicTacServer(Socket socket) {
-            this.socket = socket;
-            try {
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream()));
-            } catch (Exception e){
-                System.out.println("fail");
-            }
         }
 
 
