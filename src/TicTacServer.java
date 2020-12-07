@@ -57,7 +57,7 @@ public class TicTacServer extends Thread {
             while (true) {
                 clientCommand = readLine();
 
-                if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"))
+                if(clientCommand.matches("(move:)\\s((true)|(false))\\s[0-9]\\s[0-9]"))
                     ReceiveMove(clientCommand);
                 if(clientCommand.matches("(Close)"))
                     Disconnect();
