@@ -2,17 +2,20 @@ import java.util.StringTokenizer;
 
 public class TicTacMove {
     private boolean player;
-    private int move;
+    private int row;
+    private int col;
+
     /******************************************************************
      * Creates a tictac move
      * @param player: Boolean that represents which player the move is
      *              for, 0 represents O, 1 represents X
-     * @param move: This integer represents which spot on the board to
+     * @param row: This integer represents which spot on the board to
      *            make the move on
      ******************************************************************/
-    public TicTacMove(boolean player, int move){
+    public TicTacMove(boolean player, int row, int col){
         this.player = player;
-        this.move = move;
+        this.row = row;
+        this.col = col;
     }
 
     /******************************************************************
@@ -20,19 +23,29 @@ public class TicTacMove {
      * and an integer
      * @param player: A string that represents a boolean of which player the
      *              move is for, 0 represents O, 1 represents X
-     * @param move: This string represents an integer of which spot on
+     * @param col: This string represents an integer of which spot on
      *            the board to make the move on
      ******************************************************************/
-    public TicTacMove(String player, String move){
+    public TicTacMove(String player, String row, String col){
         this.player = Boolean.parseBoolean(player);
-        this.move = Integer.parseInt(move);
+        this.row = Integer.parseInt(row);
+        this.col = Integer.parseInt(col);
     }
+
     /******************************************************************
      * Returns and integer representing which spot on the board a move
      * is played on
      ******************************************************************/
-    public int GetMove(){
-        return this.move;
+    public int GetRow(){
+        return this.row;
+    }
+
+    /******************************************************************
+     * Returns and integer representing which spot on the board a move
+     * is played on
+     ******************************************************************/
+    public int GetCol(){
+        return this.col;
     }
 
     /******************************************************************
