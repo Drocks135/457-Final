@@ -1,5 +1,4 @@
-import javax.crypto.Cipher;
-import java.util.Scanner;
+import java.util.Random;
 public class TicTacLogic {
     private int[][] GameBoard;
     private boolean CurrentPlayer;
@@ -21,7 +20,7 @@ public class TicTacLogic {
 
     /** This Method Resets the board. We loop through our size and
      *  Initialize all the values to -1 telling us that no one has
-     *  moved on this location.*/
+     *  moved on this location. */
     public void ResetBoard(){
         for(int i = 0; i < boardSize; i ++){
             for(int j = 0; j < boardSize; j++){
@@ -126,6 +125,10 @@ public class TicTacLogic {
 
     public Boolean GetCurrentPlayer(){
         return CurrentPlayer;
+    }
+
+    public void SetCurrentPlayer(Boolean player){
+        CurrentPlayer = player;
     }
 
     public Boolean isValidMove(int row, int col, boolean player){

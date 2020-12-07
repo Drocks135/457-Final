@@ -27,11 +27,18 @@ public class TicTacServer extends Thread {
                 System.exit(-1);
             }
 
-
-            //server = new TicTacServer(serverSocket.accept());
             Thread t = new Thread(this);
             t.start();
+        }
 
+        /*************************************************************
+         * Returns if the client socket was instantiated
+         *************************************************************/
+        public boolean ClientConnected(){
+            if (socket != null)
+                return true;
+            else
+                return false;
         }
 
 
@@ -96,11 +103,25 @@ public class TicTacServer extends Thread {
             try {
                 sendLine("move: " + move.GetPlayer() + " " + move.GetRow() + " " + move.GetCol());
             } catch (Exception e){
-                e.printStackTrace();
+                System.out.println("Failed to send move to client");
             }
         }
 
+        public void SendPlayer(Boolean player){
+            try {
+                sendLine("SetPlayer: " + player);
+            } catch (Exception e){
+                System.out.println("Failed to send player to client");
+            }
+        }
 
+        public void SendReset(){
+            try {
+                sendLine("Reset");
+            } catch (Exception e){
+                System.out.println("Failed to communicate reset to client");
+            }
+        }
 
     private void sendLine(String line) throws IOException {
         if (socket == null) {
