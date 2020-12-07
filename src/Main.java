@@ -47,7 +47,6 @@ public class Main {
 
 
         }
-
         else {
             Boolean connected = false;
             while (!connected) {
