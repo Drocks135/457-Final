@@ -12,7 +12,7 @@ public class TicTacLogic {
     }
 
     public void MakeMove(TicTacMove move){
-        if (isValidMove(move.GetRow(),move.GetCol(), move.GetPlayer())) {
+        if (isValidMove(move.GetRow(), move.GetCol())) {
             GameBoard[move.GetRow()][move.GetCol()] = move.GetPlayer() ? 1 : 0;
             SwitchPlayer();
         }
@@ -121,6 +121,7 @@ public class TicTacLogic {
     private void SwitchPlayer(){
         if (CurrentPlayer) { CurrentPlayer = false; }
         else { CurrentPlayer = true; }
+        System.out.println("Player switched, cur player: " + CurrentPlayer);
     }
 
     public Boolean GetCurrentPlayer(){
@@ -131,11 +132,8 @@ public class TicTacLogic {
         CurrentPlayer = player;
     }
 
-    public Boolean isValidMove(int row, int col, boolean player){
-        if (player == CurrentPlayer){
-            return (GameBoard[row][col] != -1);
-        }
-        return false;
+    public Boolean isValidMove(int row, int col){
+            return (GameBoard[row][col] == -1);
     }
 
 }

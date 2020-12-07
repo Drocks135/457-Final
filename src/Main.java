@@ -100,10 +100,10 @@ public class Main {
 
                 }
 
-                TicTacClientHandler clientHandler = new TicTacClientHandler();
+                TicTacClientHandler clientHandler;
 
                 try {
-                    clientHandler.ConnectToServer(IPString, port);
+                    clientHandler = new TicTacClientHandler(IPString, port);
                     connected = true;
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Could not connect, please verify host name and port", "WARNING",

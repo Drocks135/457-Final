@@ -62,7 +62,7 @@ public class TicTacBoard extends JFrame {
         newGame.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                resetGame(); //Reset the game
+                handler.Reset(); //Reset the game
             }
         });
 
@@ -93,8 +93,6 @@ public class TicTacBoard extends JFrame {
     }
 
     public void resetGame(){
-        currPlayer = "x";
-        isWinner = false;
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
                 board[i][j].setText(""); //Change this to an actual icon later on when working
@@ -118,8 +116,6 @@ public class TicTacBoard extends JFrame {
                             else
                                 player = false;
                             handler.SendMove(button.row, button.col);
-                            hasWinner(); //Determine if there is a winner
-                            changePlayer();
                         }
                     }
                 });
@@ -128,20 +124,9 @@ public class TicTacBoard extends JFrame {
         }
     }
 
-    //Toggle between players x and o 
-    private void changePlayer(){
-        if(currPlayer.equals("x")){
-            currPlayer = "o";
-        }
-        else{
-            currPlayer = "x";
-        }
-    }
-
-
     //Function to determine if there is a winner or not
-    private void hasWinner(){
-        //Implement function that can check boards of all sizes for a winner
+    public void hasWinner(String output){
+        System.out.println(output);
     }
 
 
