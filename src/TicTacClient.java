@@ -9,13 +9,11 @@ public class TicTacClient extends Thread {
     private BufferedWriter writer;
     TicTacClientHandler clientHandler;
 
-    private static boolean DEBUG = false; //Enable this to see incoming and outgoing data in terminal
+    private static boolean DEBUG = true; //Enable this to see incoming and outgoing data in terminal
 
     public void StartClient(int portNumber, String HostName, TicTacClientHandler clientHandler)throws Exception{
-       // TicTacClient client;
-
+       this.clientHandler = clientHandler;
         EstablishConnection(HostName, portNumber);
-        //client = new TicTacClient(clientHandler);
         Thread t = new Thread(this);
         t.start();
     }
@@ -36,11 +34,19 @@ public class TicTacClient extends Thread {
 
             if(clientCommand.matches("(move:)\\s((true)|(false))\\s[0-9]\\s[0-9]"))
                 ReceiveMove(clientCommand);
+            if(clientCommand.matches("SetPlayer:\\s((true)|(false))"))
+                SetPlayer(clientCommand);
             if(clientCommand.matches("(Close)"))
                 Disconnect();
             if(clientCommand.matches("(Reset)"))
                 ResetGame();
+
         }
+    }
+
+    private void SetPlayer(String clientCommand){
+        Boolean player = Boolean.parseBoolean(clientCommand.substring(clientCommand.indexOf(":") + 2));
+        clientHandler.SetPlayer(player);
     }
 
     public void run() {
@@ -98,7 +104,15 @@ public class TicTacClient extends Thread {
     }
 
     public void ResetGame(){
+        clientHandler.ResetGame();
+    }
 
+    public void SendReset(){
+        try{
+            sendLine("Reset");
+        } catch (Exception e){
+            System.out.println("Failed to send reset");
+        }
     }
 
     /*****************************************************************

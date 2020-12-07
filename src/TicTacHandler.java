@@ -1,7 +1,7 @@
 interface TicTacHandler{
     void ReceiveMove (TicTacMove move);
 
-    void SendMove(TicTacMove move);
+    void SendMove(int row, int col);
 
     void Reset();
 

@@ -74,7 +74,7 @@ public class TicTacServer extends Thread {
         }
 
         public void ResetGame(){
-
+            serverHandler.Reset();
         }
 
         private void Disconnect(){
