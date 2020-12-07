@@ -31,7 +31,16 @@ public class TicTacServer extends Thread {
             //server = new TicTacServer(serverSocket.accept());
             Thread t = new Thread(this);
             t.start();
+        }
 
+        /*************************************************************
+         * Returns if the client socket was instantiated
+         *************************************************************/
+        public boolean ClientConnected(){
+            if (socket != null)
+                return true;
+            else
+                return false;
         }
 
 
@@ -99,8 +108,6 @@ public class TicTacServer extends Thread {
                 e.printStackTrace();
             }
         }
-
-
 
     private void sendLine(String line) throws IOException {
         if (socket == null) {
