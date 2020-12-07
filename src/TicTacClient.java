@@ -9,8 +9,11 @@ public class TicTacClient extends Thread {
     private BufferedWriter writer;
     TicTacClientHandler clientHandler;
 
-    private static boolean DEBUG = true; //Enable this to see incoming and outgoing data in terminal
+    private static boolean DEBUG = false; //Enable this to see incoming and outgoing data in terminal
 
+    /*****************************************************************
+     * Starts the client
+     *****************************************************************/
     public void StartClient(int portNumber, String HostName, TicTacClientHandler clientHandler)throws Exception{
        this.clientHandler = clientHandler;
         EstablishConnection(HostName, portNumber);
@@ -22,10 +25,10 @@ public class TicTacClient extends Thread {
 
     }
 
-    private TicTacClient(TicTacClientHandler clientHandler){
-        this.clientHandler = clientHandler;
-    }
-
+    /*****************************************************************
+     * Constantly reads inputs from the server and decides which
+     * methods to call based on inputs
+     *****************************************************************/
     private void processRequest() throws Exception {
         String clientCommand;
 
@@ -44,11 +47,18 @@ public class TicTacClient extends Thread {
         }
     }
 
+    /*****************************************************************
+     * Updates the clients game logic when receiving a SetPlayer
+     * command from the server
+     *****************************************************************/
     private void SetPlayer(String clientCommand){
         Boolean player = Boolean.parseBoolean(clientCommand.substring(clientCommand.indexOf(":") + 2));
         clientHandler.SetPlayer(player);
     }
 
+    /*****************************************************************
+     * Thread starting logic
+     *****************************************************************/
     public void run() {
         System.out.println("User connected" + socket.getInetAddress());
         try {
@@ -103,10 +113,16 @@ public class TicTacClient extends Thread {
         clientHandler.ReceiveMove(move);
     }
 
+    /*****************************************************************
+     * Method to reset the client when received from the server
+     *****************************************************************/
     public void ResetGame(){
         clientHandler.ResetGame();
     }
 
+    /*****************************************************************
+     * Sends a reset command to the server
+     *****************************************************************/
     public void SendReset(){
         try{
             sendLine("Reset");
@@ -130,6 +146,9 @@ public class TicTacClient extends Thread {
         }
     }
 
+    /*****************************************************************
+     * Sends a string to the server
+     *****************************************************************/
     private void sendLine(String line) throws IOException {
         if (socket == null) throw new IOException("SimpleFTP is not connected.");
         try {
@@ -144,6 +163,9 @@ public class TicTacClient extends Thread {
         }
     }
 
+    /*****************************************************************
+     * Receives a string from the server
+     *****************************************************************/
     private String readLine() throws IOException {
         String line = reader.readLine();
         while(line == null)
