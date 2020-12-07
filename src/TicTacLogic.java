@@ -20,18 +20,13 @@ public class TicTacLogic {
 
     /** This Method Resets the board. We loop through our size and
      *  Initialize all the values to -1 telling us that no one has
-     *  moved on this location. Also randomizes starting player */
+     *  moved on this location. */
     public void ResetBoard(){
         for(int i = 0; i < boardSize; i ++){
             for(int j = 0; j < boardSize; j++){
                 GameBoard[i][j] = -1;
             }
         }
-        Random rnJesus = new Random();
-        if(0 == rnJesus.nextInt(2))
-            CurrentPlayer = true;
-        else
-            CurrentPlayer = false;
     }
 
     /** This Method Determines whether the game has been won. **/
@@ -130,6 +125,10 @@ public class TicTacLogic {
 
     public Boolean GetCurrentPlayer(){
         return CurrentPlayer;
+    }
+
+    public void SetCurrentPlayer(Boolean player){
+        CurrentPlayer = player;
     }
 
     public Boolean isValidMove(int row, int col, boolean player){
