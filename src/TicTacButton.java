@@ -1,4 +1,7 @@
+import java.awt.Color;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class TicTacButton {
     public JButton jbutton;
@@ -9,5 +12,7 @@ public class TicTacButton {
         this.row = row;
         this.col = col;
         this.jbutton = new JButton();
+        this.jbutton.setBorder(BorderFactory.createLineBorder(Color.black));
+        this.jbutton.setBackground(Color.lightGray);
     }
 }

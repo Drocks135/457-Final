@@ -1,20 +1,44 @@
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileInputStream;
+import java.io.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.LineUnavailableException;
+import java.io.IOException;
+
 
 public class TicTacBoard extends JFrame {
 
     private Container gamePane;
     private int boardSize = 3;
-    private String currPlayer;
+    private Icon currPlayer;
     private JButton [][] board;
     private boolean isWinner;
     private JMenuBar menuBar;
     private JMenu menu;
     private JMenuItem quitGame;
     private JMenuItem newGame;
-    private JMenuItem connectGame;
+    private JMenuItem muteSound;
     private TicTacHandler handler;
+    private boolean playSound;
+
+
+    //Get appropriately scaled versions of the x and o icon for game usage.
+    private Icon xPlayerIcon = new ImageIcon(new ImageIcon("src/icons/xplayer.png")
+    .getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+    private Icon oPlayerIcon = new ImageIcon(new ImageIcon("src/icons/oplayer.png")
+    .getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+
+    //Get both wav sound files for background music and player movement
+    File bgmSound = new File("src/sounds/bgm.wav");
+    File moveSound = new File("src/sounds/move.wav");
 
     public TicTacBoard(TicTacHandler handler) {
         super();
@@ -25,9 +49,10 @@ public class TicTacBoard extends JFrame {
         setResizable(false); //Set Resizability
         setDefaultCloseOperation(DISPOSE_ON_CLOSE); //Control closing of application
         setVisible(true);
-        currPlayer = "x";
+        currPlayer = xPlayerIcon;
         board = new JButton[boardSize][boardSize];
         isWinner = false;
+        playSound = true;
         initializeGame();
         initializeMenu();
         this.handler = handler;
@@ -55,12 +80,13 @@ public class TicTacBoard extends JFrame {
     }
 
     public void MakeMove(TicTacMove move){
-        String player;
+        Icon player;
         if (move.GetPlayer())
-            player = "x";
+            player = xPlayerIcon;
         else
-            player = "o";
-        board[move.GetRow()][move.GetCol()].setText(player);
+            player = oPlayerIcon;
+        board[move.GetRow()][move.GetCol()].setIcon(player);
+        playMoveSound();
     }
 
     private void initializeMenu(){
@@ -68,7 +94,7 @@ public class TicTacBoard extends JFrame {
         menu = new JMenu("File");
 
         newGame = new JMenuItem("New Game");
-        connectGame = new JMenuItem("Connect"); //Will handle connecting to opponent
+        muteSound = new JMenuItem("Mute Sound");
         quitGame = new JMenuItem("Quit");
 
         newGame.addActionListener(new ActionListener(){
@@ -85,27 +111,35 @@ public class TicTacBoard extends JFrame {
             }
         });
 
-        connectGame.addActionListener(new ActionListener(){
+        muteSound.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                //Add code for connection
+                if(playSound == true){
+                    playSound = false;
+                    muteSound.setText("Unmute Sound");
+                    
+                }
+                else{
+                    playSound = true;
+                    muteSound.setText("Mute Sound");
+                   
+                }
             }
         });
 
         quitGame.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-
                 if(ConfirmChange("Are you sure you wish to quit?", "Quit Menu")){
+                    playSound = false;
                     System.exit(0);
                 }
-
             }
         });
 
         //Add all menu items to the menu
-        menu.add(connectGame);
         menu.add(newGame);
+        menu.add(muteSound);
         menu.add(quitGame);
 
         //Add menu to the menubar
@@ -122,9 +156,10 @@ public class TicTacBoard extends JFrame {
     public void resetGame(){
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
-                board[i][j].setText(""); //Change this to an actual icon later on when working
+                board[i][j].setIcon(null); 
             }
         }
+        playSound = true;
     }
 
     private void initializeGame(){
@@ -136,9 +171,9 @@ public class TicTacBoard extends JFrame {
                 button.jbutton.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        if(((JButton)e.getSource()).getText().equals("") && isWinner == false){
+                        if(((JButton)e.getSource()).getIcon() == null && isWinner == false){
                             Boolean player;
-                            if (currPlayer.equals("x"))
+                            if (currPlayer.equals(xPlayerIcon))
                                 player = true;
                             else
                                 player = false;
@@ -151,7 +186,49 @@ public class TicTacBoard extends JFrame {
         }
     }
 
+    //This would play a bgm sound but I haven't figured out how to mute it immediately yet
+    private void playBgmSound(){
+        try {
+            AudioInputStream bgmStream = AudioSystem.getAudioInputStream(bgmSound);
+            AudioFormat bgmFormat = bgmStream.getFormat();
+            DataLine.Info bgmInfo = new DataLine.Info(Clip.class, bgmFormat);
+            Clip bgmClip = (Clip) AudioSystem.getLine(bgmInfo);   
+            bgmClip.open(bgmStream);
+            if(playSound == true){
+                bgmClip.start();
+            }
+            else{
+                bgmClip.stop();
+            }
+        } catch (Exception e) {
 
+            //Add actual exceptions
+            e.printStackTrace();
+        }
+    }
 
+    private void playMoveSound(){
+        try {
+            AudioInputStream moveStream = AudioSystem.getAudioInputStream(moveSound);
+            AudioFormat moveFormat = moveStream.getFormat();
+            DataLine.Info moveInfo = new DataLine.Info(Clip.class, moveFormat);  
+            Clip moveClip = (Clip) AudioSystem.getLine(moveInfo);
+            moveClip.open(moveStream);  
+            if(playSound == true){
+                moveClip.start();
+            }
+            else{
+                moveClip.stop();
+            }
+         } catch (Exception e) {
+              //Add actual exceptions
+             e.printStackTrace();
+         }
+   
+    }
 
+    //Function to determine if there is a winner or not
+    public void hasWinner(String output){
+        System.out.println(output);
+    }
 }
