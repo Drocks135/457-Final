@@ -33,6 +33,15 @@ public class TicTacBoard extends JFrame {
         this.handler = handler;
     }
 
+    public void DisplayInvalidTurn(){
+        //todo: make joption pain to let the player know it's not their turn
+    }
+
+    public Boolean ConfirmReset(){
+        //todo: make a confirmation for a board reset
+        return false;
+    }
+
     public void MakeMove(TicTacMove move){
         String player;
         if (move.GetPlayer())
