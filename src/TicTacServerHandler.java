@@ -1,11 +1,13 @@
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Random;
 
 public class TicTacServerHandler implements TicTacHandler{
     private TicTacBoard board;
     private TicTacServer server;
     private TicTacLogic game;
-    private Socket socket;
+    private boolean player;
+    //private Socket socket;
 
     public TicTacServerHandler(int port) throws Exception {
         this.server = new TicTacServer();
@@ -16,6 +18,15 @@ public class TicTacServerHandler implements TicTacHandler{
 
     private void StartServer(int port) throws Exception{
         server.StartServer(port, this, server);
+        SetPlayer();
+    }
+
+    private void SetPlayer(){
+        Random rnJesus = new Random();
+        if(0 == rnJesus.nextInt(2))
+            player = false;
+        else
+            player = true;
     }
 
     public void ReceiveMove(TicTacMove move){
