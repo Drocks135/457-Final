@@ -6,7 +6,7 @@ public class TicTacServerHandler implements TicTacHandler{
     private TicTacBoard board;
     private TicTacServer server;
     private TicTacLogic game;
-    private boolean player;
+    private boolean player = false;
     //private Socket socket;
 
     public TicTacServerHandler(int port) throws Exception {
@@ -18,15 +18,8 @@ public class TicTacServerHandler implements TicTacHandler{
 
     private void StartServer(int port) throws Exception{
         server.StartServer(port, this, server);
-        SetPlayer();
-    }
 
-    private void SetPlayer(){
-        Random rnJesus = new Random();
-        if(0 == rnJesus.nextInt(2))
-            player = false;
-        else
-            player = true;
+
     }
 
     public void ReceiveMove(TicTacMove move){
