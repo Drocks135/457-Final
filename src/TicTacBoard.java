@@ -117,8 +117,7 @@ public class TicTacBoard extends JFrame {
                                 player = true;
                             else
                                 player = false;
-                            TicTacMove move = new TicTacMove(player, button.row, button.col);
-                            handler.SendMove(move);
+                            handler.SendMove(button.row, button.col);
                             hasWinner(); //Determine if there is a winner
                             changePlayer();
                         }

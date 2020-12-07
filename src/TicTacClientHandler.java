@@ -20,7 +20,8 @@ public class TicTacClientHandler implements TicTacHandler{
         game.MakeMove(move);
     }
 
-    public void SendMove(TicTacMove move){
+    public void SendMove(int row, int col){
+        TicTacMove move = new TicTacMove(player, row, col);
         if(player = game.GetCurrentPlayer())
             client.SendMove(move);
         else

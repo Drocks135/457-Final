@@ -37,7 +37,8 @@ public class TicTacServerHandler implements TicTacHandler{
         game.MakeMove(move);
     }
 
-    public void SendMove(TicTacMove move){
+    public void SendMove(int row, int col){
+        TicTacMove move = new TicTacMove(player, row, col);
         if(game.GetCurrentPlayer() == player)
             server.SendMove(move);
         else
