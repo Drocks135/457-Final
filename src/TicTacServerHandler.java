@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
@@ -78,14 +79,37 @@ public class TicTacServerHandler implements TicTacHandler{
     private void HasWon(){
         int result = game.HasWon();
         if(game.HasWon() != -1) {
-            if(result == 0)
-                board.hasWinner("You lost, get rekt nerd");
-            if(result == 1)
-                board.hasWinner("You won, poggers my doggy");
-            if(result == 2)
-                board.hasWinner("WOOOOOOWZA, ISSA DRAW, uWu!!!!!! :)");
+            if(result == 0) {
+                winMessage("Get rekt nerd", "You LOST");
+            }
+            if(result == 1){
+                winMessage("Poggers my doggy", "You WON");
+            }
+
+            if(result == 2){
+                winMessage("ISSA DRAW, uWu!!!!!! :)", "WOWWZA NO WAY THATS CRAZY");
+            }
         }
     }
+
+    private void winMessage(String message, String title){
+
+        Object[] buttons = { "Play Again", "Quit"};
+        int choice = JOptionPane.showOptionDialog(null, message, title,
+                JOptionPane.INFORMATION_MESSAGE, 1,null, buttons, buttons[0]);
+        System.out.println(choice);
+
+        if(choice == 0){
+            Reset();
+        }
+        else{
+            board.manualQuit();
+        }
+
+    }
+
+
+
 
     /*****************************************************************
      * Resets the server board and issues a reset command to the
