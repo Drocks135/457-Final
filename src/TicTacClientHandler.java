@@ -5,6 +5,7 @@ public class TicTacClientHandler implements TicTacHandler{
     private TicTacBoard board;
     private TicTacClient client;
     private TicTacLogic game;
+    private boolean player = true;
 
     public TicTacClientHandler(){
         this.client = new TicTacClient();
@@ -20,7 +21,10 @@ public class TicTacClientHandler implements TicTacHandler{
     }
 
     public void SendMove(TicTacMove move){
-        client.SendMove(move);
+        if(player = game.GetCurrentPlayer())
+            client.SendMove(move);
+        else
+            board.DisplayInvalidTurn();
     }
 
     public void Reset(){
