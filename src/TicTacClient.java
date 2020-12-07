@@ -9,7 +9,7 @@ public class TicTacClient extends Thread {
     private BufferedWriter writer;
     TicTacClientHandler clientHandler;
 
-    private static boolean DEBUG = true; //Enable this to see incoming and outgoing data in terminal
+    private static boolean DEBUG = false; //Enable this to see incoming and outgoing data in terminal
 
     /*****************************************************************
      * Starts the client
