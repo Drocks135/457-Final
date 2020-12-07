@@ -97,9 +97,13 @@ public class TicTacBoard extends JFrame {
             public void actionPerformed(ActionEvent e){
                 if(playSound == true){
                     playSound = false;
+                    muteSound.setText("Unmute Sound");
+                    
                 }
                 else{
                     playSound = true;
+                    muteSound.setText("Mute Sound");
+                   
                 }
             }
         });
