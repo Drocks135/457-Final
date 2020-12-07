@@ -29,6 +29,10 @@ public class TicTacClientHandler implements TicTacHandler{
         board.resetGame();
     }
 
+    public void SendReset(){
+        client.SendReset();
+    }
+
     public void ConnectToServer(String serverName, int connectionPort) throws Exception{
         client.StartClient(connectionPort, serverName, this);
     }

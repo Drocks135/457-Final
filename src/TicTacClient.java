@@ -98,7 +98,15 @@ public class TicTacClient extends Thread {
     }
 
     public void ResetGame(){
+        clientHandler.Reset();
+    }
 
+    public void SendReset(){
+        try{
+            sendLine("Reset");
+        } catch (Exception e){
+            System.out.println("Failed to send reset");
+        }
     }
 
     /*****************************************************************
