@@ -2,8 +2,6 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        TicTacServerHandler serverHandler;
-
         String startOption = ShowStartDialog();
 
         System.out.println("The user chose: " + startOption);
