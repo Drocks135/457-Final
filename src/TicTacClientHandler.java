@@ -13,10 +13,9 @@ public class TicTacClientHandler implements TicTacHandler{
      *****************************************************************/
     public TicTacClientHandler(String hostName, int hostPort) throws Exception{
         this.client = new TicTacClient();
+        client.StartClient(hostPort, hostName, this);
         this.game = new TicTacLogic(3, true);
         this.board = new TicTacBoard(this);
-        client.StartClient(hostPort, hostName, this);
-
     }
 
     /*****************************************************************
