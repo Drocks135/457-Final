@@ -16,6 +16,7 @@ public class TicTacServerHandler implements TicTacHandler{
         this.server = new TicTacServer();
         this.game = new TicTacLogic(3, true);
         this.board = new TicTacBoard(this);
+        board.revalidated();
         StartServer(port);
     }
 

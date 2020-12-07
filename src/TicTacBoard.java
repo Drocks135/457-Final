@@ -96,6 +96,7 @@ public class TicTacBoard extends JFrame {
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
                 board[i][j].setText(""); //Change this to an actual icon later on when working
+                board[i][j].setEnabled(true);
             }
         }
     }
@@ -127,6 +128,11 @@ public class TicTacBoard extends JFrame {
     //Function to determine if there is a winner or not
     public void hasWinner(String output){
         System.out.println(output);
+        for(int i = 0; i < boardSize; i++){
+            for(int j = 0; j < boardSize; j++) {
+                board[i][j].setEnabled(false);
+            }
+        }
     }
 
 
