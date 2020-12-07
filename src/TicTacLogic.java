@@ -79,16 +79,24 @@ public class TicTacLogic {
         countO = 0;
         countX = 0;
         // Diagonals bottom left to top right
-        for (int i = boardSize - 1; i > -1; i--){
-            if (GameBoard[i][i] == 1){
-                countX ++;
-            }
-            if (GameBoard[i][i] == 0){
-                countO ++;
-            }
-            if (countX == boardSize) return 1;
-            if (countO == boardSize) return 0;
-        }
+
+        if (GameBoard[2][0] == 1)
+            countX ++;
+        if (GameBoard[1][1] == 1)
+            countX ++;
+        if (GameBoard[0][2] == 1)
+            countX ++;
+
+        if (GameBoard[2][0] == 0)
+            countO ++;
+        if (GameBoard[1][1] == 0)
+            countO ++;
+        if (GameBoard[0][2] == 0)
+            countO ++;
+
+
+        if (countX == boardSize) return 1;
+        if (countO == boardSize) return 0;
 
         // Draw
         int i = 0;
