@@ -34,11 +34,23 @@ public class TicTacBoard extends JFrame {
     }
 
     public void DisplayInvalidTurn(){
-        //todo: make joption pain to let the player know it's not their turn
+        JOptionPane.showMessageDialog(null, "It is not your turn yet. Wait just, like, one second.", "WARNING",
+                JOptionPane.WARNING_MESSAGE);
     }
 
-    public Boolean ConfirmReset(){
+    //this handles both reset and quit
+    public Boolean ConfirmChange(String message, String title){
         //todo: make a confirmation for a board reset
+
+        Object[] buttons = { "Yes", "No"};
+        int choice = JOptionPane.showOptionDialog(null, message, title,
+                JOptionPane.INFORMATION_MESSAGE, 1,null, buttons, buttons[0]);
+        System.out.println(choice);
+
+        if(choice == 0){
+            return true;
+        }
+
         return false;
     }
 
@@ -62,7 +74,14 @@ public class TicTacBoard extends JFrame {
         newGame.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                handler.Reset(); //Reset the game
+
+                String message = "Are you sure you wish to reset?";
+                String title = "Reset Menu";
+
+                if(ConfirmChange(message, title)){
+                    handler.Reset(); //Reset the game
+                }
+
             }
         });
 
@@ -76,7 +95,11 @@ public class TicTacBoard extends JFrame {
         quitGame.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                System.exit(0);
+
+                if(ConfirmChange("Are you sure you wish to quit?", "Quit Menu")){
+                    System.exit(0);
+                }
+
             }
         });
 
@@ -90,6 +113,10 @@ public class TicTacBoard extends JFrame {
 
         //Set the JMenuBar
         setJMenuBar(menuBar);
+    }
+
+    public void manualQuit(){
+        System.exit(0);
     }
 
     public void resetGame(){
@@ -122,11 +149,6 @@ public class TicTacBoard extends JFrame {
                 gamePane.add(button.jbutton);
             }
         }
-    }
-
-    //Function to determine if there is a winner or not
-    public void hasWinner(String output){
-        System.out.println(output);
     }
 
 
