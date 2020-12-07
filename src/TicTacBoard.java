@@ -55,7 +55,6 @@ public class TicTacBoard extends JFrame {
         playSound = true;
         initializeGame();
         initializeMenu();
-        playBgmSound();
         this.handler = handler;
     }
 
@@ -158,6 +157,7 @@ public class TicTacBoard extends JFrame {
         }
     }
 
+    //This would play a bgm sound but I haven't figured out how to mute it immediately yet
     private void playBgmSound(){
         try {
             AudioInputStream bgmStream = AudioSystem.getAudioInputStream(bgmSound);
