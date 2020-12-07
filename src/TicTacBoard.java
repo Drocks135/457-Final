@@ -14,8 +14,9 @@ public class TicTacBoard extends JFrame {
     private JMenuItem quitGame;
     private JMenuItem newGame;
     private JMenuItem connectGame;
+    private TicTacHandler handler;
 
-    public TicTacBoard() {
+    public TicTacBoard(TicTacHandler handler) {
         super();
         gamePane =  this.getContentPane();
         gamePane.setLayout(new GridLayout(boardSize,boardSize));
@@ -29,6 +30,16 @@ public class TicTacBoard extends JFrame {
         isWinner = false;
         initializeGame();
         initializeMenu();
+        this.handler = handler;
+    }
+
+    public void MakeMove(TicTacMove move){
+        String player;
+        if (move.GetPlayer())
+            player = "x";
+        else
+            player = "o";
+        board[move.GetRow()][move.GetCol()].setText(player);
     }
 
     private void initializeMenu(){
@@ -72,7 +83,7 @@ public class TicTacBoard extends JFrame {
         setJMenuBar(menuBar);
     }
 
-    private void resetGame(){
+    public void resetGame(){
         currPlayer = "x";
         isWinner = false;
         for(int i = 0; i < boardSize; i++){
@@ -85,20 +96,26 @@ public class TicTacBoard extends JFrame {
     private void initializeGame(){
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
-                JButton button = new JButton();
-                button.setFont(new Font(Font.SERIF, Font.BOLD, 30)); //Text style for the text icons
-                board[i][j] = button;
-                button.addActionListener(new ActionListener(){
+                TicTacButton button = new TicTacButton(i, j);
+                button.jbutton.setFont(new Font(Font.SERIF, Font.BOLD, 30)); //Text style for the text icons
+                board[i][j] = button.jbutton;
+                button.jbutton.addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e){
                         if(((JButton)e.getSource()).getText().equals("") && isWinner == false){
-                            button.setText(currPlayer);
+                            Boolean player;
+                            if (currPlayer.equals("x"))
+                                player = true;
+                            else
+                                player = false;
+                            TicTacMove move = new TicTacMove(player, button.row, button.col);
+                            handler.SendMove(move);
                             hasWinner(); //Determine if there is a winner
                             changePlayer();
                         }
                     }
                 });
-                gamePane.add(button);
+                gamePane.add(button.jbutton);
             }
         }
     }

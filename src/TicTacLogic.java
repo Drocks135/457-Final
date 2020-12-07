@@ -1,96 +1,138 @@
+import javax.crypto.Cipher;
 import java.util.Scanner;
 public class TicTacLogic {
-    public static final int BLANK = 0;
-    public static final int XPLAYER = 1;
-    public static final int OPLAYER = 2;
+    private int[][] GameBoard;
+    private boolean CurrentPlayer;
+    private int boardSize;
 
-    public static final int PLAYING = 0;
-    public static final int DRAW = 1;
-    public static final int X_WON = 2;
-    public static final int O_WON = 3;
-
-
-    public static final int ROWS = 3, COLS = 3;
-    public static int[][] board = new int[ROWS][COLS];
-
-    public static int currentState;
-    public static int currentPlayer;
-    public static int currentRow, currentCol;
-
-    public static Scanner in = new Scanner(System.in);
-
-    public static void main(String[] args) {
-        initGame();
-        do {
-            playerMove(currentPlayer);
-            updateGame(currentPlayer, currentRow, currentCol);
-            if (currentState == X_WON) {
-                System.out.println("X won!");
-            } else if (currentState == O_WON) {
-                System.out.println("O won!");
-            } else if (currentState == DRAW) {
-                System.out.println("Cats Game!");
-            }
-            // Switch player
-            currentPlayer = (currentPlayer == XPLAYER) ? OPLAYER : XPLAYER;
-        } while (currentState == PLAYING);
+    public TicTacLogic(int boardSize, Boolean startingPlayer){
+        this.boardSize = boardSize;
+        GameBoard = new int[boardSize][boardSize];
+        CurrentPlayer = startingPlayer;
+        ResetBoard();
     }
 
-
-    public static void initGame() {
-        for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
-                board[row][col] = BLANK;
-            }
-        }
-        currentState = PLAYING;
-        currentPlayer = XPLAYER;
-    }
-
-    public static void playerMove(int currentPlay) {
-        //TODO: Click JButtons to move player
-    }
-
-    public static void updateGame(int currentPlay, int currentRow, int currentCol) {
-        if (hasWon(currentPlay, currentRow, currentCol)) {
-            currentState = (currentPlay == XPLAYER) ? X_WON : O_WON;
-        } else if (isDraw()) {
-            currentState = DRAW;
+    public void MakeMove(TicTacMove move){
+        if (isValidMove(move.GetRow(),move.GetCol(), move.GetPlayer())) {
+            GameBoard[move.GetRow()][move.GetCol()] = move.GetPlayer() ? 1 : 0;
+            SwitchPlayer();
         }
     }
 
-    public static boolean isDraw() {
-        for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
-                if (board[row][col] == BLANK) {
-                    return false;
+    /** This Method Resets the board. We loop through our size and
+     *  Initialize all the values to -1 telling us that no one has
+     *  moved on this location.*/
+    public void ResetBoard(){
+        for(int i = 0; i < boardSize; i ++){
+            for(int j = 0; j < boardSize; j++){
+                GameBoard[i][j] = -1;
+            }
+        }
+    }
+
+    /** This Method Determines whether the game has been won. **/
+    public int HasWon(){
+        int countX = 0;
+        int countO = 0;
+        boolean canContinue = false;
+
+        // Rows
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++){
+                if (GameBoard[i][j] == 1){
+                    countX ++;
+                }
+                else if (GameBoard[i][j] == 0){
+                    countO ++;
                 }
             }
+            if (countX == boardSize) return 1;
+            if (countO == boardSize) return 0;
+            countO = 0;
+            countX = 0;
         }
-        return true;  // no empty cell, it's a draw
+        // Cols
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++){
+                if (GameBoard[j][i] == 1){
+                    countX ++;
+                }
+                else if (GameBoard[j][i] == 0){
+                    countO ++;
+                }
+            }
+            if (countX == boardSize) return 1;
+            if (countO == boardSize) return 0;
+            countO = 0;
+            countX = 0;
+        }
+        // Diagonals top top left to bottom right
+        for (int i = 0; i < boardSize; i++){
+            if (GameBoard[i][i] == 1){
+                countX ++;
+            }
+            if (GameBoard[i][i] == 0){
+                countO ++;
+            }
+            if (countX == boardSize) return 1;
+            if (countO == boardSize) return 0;
+        }
+        countO = 0;
+        countX = 0;
+        // Diagonals bottom left to top right
+        for (int i = boardSize - 1; i > -1; i--){
+            if (GameBoard[i][i] == 1){
+                countX ++;
+            }
+            if (GameBoard[i][i] == 0){
+                countO ++;
+            }
+            if (countX == boardSize) return 1;
+            if (countO == boardSize) return 0;
+        }
+
+        // Draw
+        int i = 0;
+        int j = 0;
+        while(!canContinue){
+            // If empty space we can continue.
+            if (GameBoard[i][j] == -1){
+                canContinue = true;
+            }
+            // If we checked the whole board
+            if (i == boardSize -1 && j == boardSize -1){
+                // See if you still can't continue. If so return false.
+                if (!canContinue){
+                    return 2;
+                }
+            }
+            // If J is end of row increment i reset j to 0;
+            if (j == boardSize - 1){
+                i++;
+                j = -1;
+            }
+            // Increment j;
+            j++;
+        }
+
+        // Game is not won.
+        return -1;
     }
 
-    /**We can use currentRow and currentCol because they can only win after they place a in
-     * that row or column **/
-    public static boolean hasWon(int currentPlay, int currentRow, int currentCol) {
-        return (board[currentRow][0] == currentPlay         // 3-in-the-row
-                && board[currentRow][1] == currentPlay
-                && board[currentRow][2] == currentPlay
-
-                || board[0][currentCol] == currentPlay      // 3-in-the-column
-                && board[1][currentCol] == currentPlay
-                && board[2][currentCol] == currentPlay
-
-                || currentRow == currentCol            // 3-in-the-diagonal
-                && board[0][0] == currentPlay
-                && board[1][1] == currentPlay
-                && board[2][2] == currentPlay
-
-                || currentRow + currentCol == 2  // 3-in-the-opposite-diagonal
-                && board[0][2] == currentPlay
-                && board[1][1] == currentPlay
-                && board[2][0] == currentPlay);
+    private void SwitchPlayer(){
+        if (CurrentPlayer) { CurrentPlayer = false; }
+        else { CurrentPlayer = true; }
     }
 
+    public Boolean GetCurrentPlayer(){
+        return CurrentPlayer;
+    }
+
+    public Boolean isValidMove(int row, int col, boolean player){
+        if (player == CurrentPlayer){
+            return (GameBoard[row][col] != -1);
+        }
+        return false;
+    }
 
 }

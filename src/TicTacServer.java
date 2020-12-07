@@ -9,41 +9,34 @@ public class TicTacServer extends Thread {
         private Socket socket;
         private BufferedReader reader = null;
         private BufferedWriter writer = null;
+        private TicTacServerHandler serverHandler;
         private static boolean DEBUG = true;
 
-        public void StartServer(){
+        public void StartServer(int portNumber, TicTacServerHandler serverHandler, TicTacServer server) throws Exception{
             ServerSocket serverSocket = null;
-            TicTacServer server;
+            this.serverHandler = serverHandler;
 
             try{
-                serverSocket = new ServerSocket(1200);
+                serverSocket = new ServerSocket(portNumber);
+                this.socket = serverSocket.accept();
+                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                writer = new BufferedWriter(
+                        new OutputStreamWriter(socket.getOutputStream()));
             } catch (IOException e){
                 System.err.println("Could not listen on port: 1200.");
                 System.exit(-1);
             }
 
-            while (true)
-            {
-                try {
-                    server = new TicTacServer(serverSocket.accept());
-                    Thread t = new Thread(server);
-                    t.start();
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
+
+            //server = new TicTacServer(serverSocket.accept());
+            Thread t = new Thread(this);
+            t.start();
+
         }
 
 
-        public TicTacServer(Socket socket) {
-            this.socket = socket;
-            try {
-                reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream()));
-            } catch (Exception e){
-                System.out.println("fail");
-            }
+        public TicTacServer(){
+
         }
 
 
@@ -64,11 +57,17 @@ public class TicTacServer extends Thread {
             while (true) {
                 clientCommand = readLine();
 
-                if(clientCommand.matches("(move:)\\s(x|o)\\s[1-9]"))
-                    MakeMove(clientCommand);
+                if(clientCommand.matches("(move:)\\s((true)|(false))\\s[0-9]\\s[0-9]"))
+                    ReceiveMove(clientCommand);
                 if(clientCommand.matches("(Close)"))
                     Disconnect();
+                if(clientCommand.matches("(Reset)"))
+                    ResetGame();
             }
+        }
+
+        public void ResetGame(){
+
         }
 
         private void Disconnect(){
@@ -81,17 +80,27 @@ public class TicTacServer extends Thread {
             }
         }
 
-        public TicTacMove MakeMove(String command){
+        public void ReceiveMove(String command){
             TicTacMove move = null;
             try {
                 StringTokenizer tokenCommand = new StringTokenizer(command);
                 tokenCommand.nextToken(); //Consume the move token
-                move = new TicTacMove(tokenCommand.nextToken(), tokenCommand.nextToken());
+                move = new TicTacMove(tokenCommand.nextToken(), tokenCommand.nextToken(), tokenCommand.nextToken());
             } catch (Exception e){
                 System.out.println("Fail");
             }
-            return move;
+            serverHandler.ReceiveMove(move);
         }
+
+        public void SendMove(TicTacMove move){
+            try {
+                sendLine("move: " + move.GetPlayer() + " " + move.GetRow() + " " + move.GetCol());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
 
     private void sendLine(String line) throws IOException {
         if (socket == null) {
