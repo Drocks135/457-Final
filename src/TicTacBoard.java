@@ -59,11 +59,11 @@ public class TicTacBoard extends JFrame {
     File moveSound = new File("src/sounds/move.wav");
 
     /***************************************************************************************
-    * Desc: This class is used to create a new version of a tic-tac-board and uses the 
-    * TicTacHandler in order to handle the game between both client and host 
+    * Desc: This class is used to create a new version of a tic-tac-board and uses the
+    * TicTacHandler in order to handle the game between both client and host
     *
     * @param handler
-    * 
+    *
     ***************************************************************************************/
     public TicTacBoard(TicTacHandler handler) {
         super();
@@ -73,7 +73,7 @@ public class TicTacBoard extends JFrame {
         setTitle("Tic Tac Toe");
         setSize(800,800); //Resolution
         setResizable(false); //Set Resizability
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE); //Control closing of application
+        setDefaultCloseOperation(EXIT_ON_CLOSE); //Control closing of application
         setVisible(true);
         currPlayer = xPlayerIcon;
         board = new JButton[boardSize][boardSize];
@@ -87,19 +87,19 @@ public class TicTacBoard extends JFrame {
     /*************************************************************************************
      * Desc: This function is used to display to the user if it is their turn or not when
      * attempting to press on the board
-     * 
+     *
      * **********************************************************************************/
     public void DisplayInvalidTurn(){
-        JOptionPane.showMessageDialog(null, 
+        JOptionPane.showMessageDialog(null,
         "It is not your turn yet. Wait just, like, one second.", "WARNING",
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    
+
     /*************************************************************************************
      * Desc: This function is used to handle both the reset and quit abilities of both
      * the client and host so that things are not out of sync
-     * 
+     *
      * **********************************************************************************/
     public Boolean ConfirmChange(String message, String title){
         //todo: make a confirmation for a board reset
@@ -127,12 +127,12 @@ public class TicTacBoard extends JFrame {
         playMoveSound();
     }
 
-    
+
     /*************************************************************************************
      * Desc: This function is used to control all of the menu items that are at the top
-     * of the window. These include the new game button, mute sound button, and the 
+     * of the window. These include the new game button, mute sound button, and the
      * quit button. It also adds everything to the menu itself
-     * 
+     *
      * **********************************************************************************/
     private void initializeMenu(){
         menuBar = new JMenuBar();
@@ -162,12 +162,12 @@ public class TicTacBoard extends JFrame {
                 if(playSound == true){
                     playSound = false;
                     muteSound.setText("Unmute Sound");
-                    
+
                 }
                 else{
                     playSound = true;
                     muteSound.setText("Mute Sound");
-                   
+
                 }
             }
         });
@@ -194,27 +194,27 @@ public class TicTacBoard extends JFrame {
         setJMenuBar(menuBar);
     }
 
+    //Used to manually quit the game
+    public void manualQuit(){
+        System.exit(0);
+    }
+
     //Used to control the reset of the game
     public void resetGame(){
-        System.out.println("Do we just hang?");
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
-                board[i][j].setIcon(null); 
+                board[i][j].setIcon(null);
             }
         }
-        //closes jop if it was made
-        System.out.println("Does this run");
-        frame.setVisible(false);
-
         playSound = true;
     }
 
-    
+
     /*************************************************************************************
-     * Desc: This function is used to intitalize the tic tac toe game and sets up the 
+     * Desc: This function is used to intitalize the tic tac toe game and sets up the
      * board for both the host and the client to use. It also controlls whos' turn it is
      * at any given time for the JButtons on the board.
-     * 
+     *
      * **********************************************************************************/
     private void initializeGame(){
         for(int i = 0; i < boardSize; i++){
@@ -240,7 +240,7 @@ public class TicTacBoard extends JFrame {
         }
     }
 
-    //This is used to play the background music sound but I did not find a way to 
+    //This is used to play the background music sound but I did not find a way to
     //continually check if it should be playing or not so it is currently left out.
     //It will run if it is called anywhere.
     private void playBgmSound(){
@@ -248,7 +248,7 @@ public class TicTacBoard extends JFrame {
             AudioInputStream bgmStream = AudioSystem.getAudioInputStream(bgmSound);
             AudioFormat bgmFormat = bgmStream.getFormat();
             DataLine.Info bgmInfo = new DataLine.Info(Clip.class, bgmFormat);
-            Clip bgmClip = (Clip) AudioSystem.getLine(bgmInfo);   
+            Clip bgmClip = (Clip) AudioSystem.getLine(bgmInfo);
             bgmClip.open(bgmStream);
             if(playSound == true){
                 bgmClip.start();
@@ -269,9 +269,9 @@ public class TicTacBoard extends JFrame {
         try {
             AudioInputStream moveStream = AudioSystem.getAudioInputStream(moveSound);
             AudioFormat moveFormat = moveStream.getFormat();
-            DataLine.Info moveInfo = new DataLine.Info(Clip.class, moveFormat);  
+            DataLine.Info moveInfo = new DataLine.Info(Clip.class, moveFormat);
             Clip moveClip = (Clip) AudioSystem.getLine(moveInfo);
-            moveClip.open(moveStream);  
+            moveClip.open(moveStream);
             if(playSound == true){
                 moveClip.start();
             }
@@ -282,7 +282,7 @@ public class TicTacBoard extends JFrame {
               //Add actual exceptions
              e.printStackTrace();
          }
-   
+
     }
 
     //Function to determine if there is a winner or not
@@ -319,5 +319,6 @@ public class TicTacBoard extends JFrame {
             jop.showMessageDialog(frame, message);
             handler.Reset();
         }
+        frame.setVisible(false);
     }
 }
