@@ -80,32 +80,16 @@ public class TicTacServerHandler implements TicTacHandler{
         int result = game.HasWon();
         if(game.HasWon() != -1) {
             if(result == 0) {
-                winMessage("Get rekt nerd", "You LOST");
+                board.hasWinner("Get rekt nerd", "You LOST");
             }
             if(result == 1){
-                winMessage("Poggers my doggy", "You WON");
+                board.hasWinner("Poggers my doggy", "You WON");
             }
 
             if(result == 2){
-                winMessage("ISSA DRAW, uWu!!!!!! :)", "WOWWZA NO WAY THATS CRAZY");
+                board.hasWinner("ISSA DRAW, uWu!!!!!! :)", "WOWWZA NO WAY THATS CRAZY");
             }
         }
-    }
-
-    private void winMessage(String message, String title){
-
-        Object[] buttons = { "Play Again", "Quit"};
-        int choice = JOptionPane.showOptionDialog(null, message, title,
-                JOptionPane.INFORMATION_MESSAGE, 1,null, buttons, buttons[0]);
-        System.out.println(choice);
-
-        if(choice == 0){
-            Reset();
-        }
-        else{
-            board.manualQuit();
-        }
-
     }
 
 

@@ -28,6 +28,8 @@ public class TicTacBoard extends JFrame {
     private JMenuItem muteSound;
     private TicTacHandler handler;
     private boolean playSound;
+    private JOptionPane jop;
+    private JFrame frame;
 
 
     //Get appropriately scaled versions of the x and o icon for game usage.
@@ -149,16 +151,17 @@ public class TicTacBoard extends JFrame {
         setJMenuBar(menuBar);
     }
 
-    public void manualQuit(){
-        System.exit(0);
-    }
-
     public void resetGame(){
+        System.out.println("Do we just hang?");
         for(int i = 0; i < boardSize; i++){
             for(int j = 0; j < boardSize; j++){
                 board[i][j].setIcon(null); 
             }
         }
+        //closes jop if it was made
+        System.out.println("Does this run");
+        frame.setVisible(false);
+
         playSound = true;
     }
 
@@ -228,7 +231,23 @@ public class TicTacBoard extends JFrame {
     }
 
     //Function to determine if there is a winner or not
-    public void hasWinner(String output){
-        System.out.println(output);
+    public void hasWinner(String message, String title){
+        Object[] buttons = { "Play Again", "Quit"};
+
+        frame = new JFrame("Frame");
+        frame.setVisible(true);
+
+
+        jop = new JOptionPane();
+
+        int choice = jop.showOptionDialog(frame, message, title,
+                JOptionPane.INFORMATION_MESSAGE, 1,null, buttons, buttons[0]);
+
+        if(choice == 0){
+            handler.Reset();
+        }
+        else if(choice == 1){
+            System.exit(0);
+        }
     }
 }

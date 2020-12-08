@@ -13,9 +13,10 @@ public class TicTacClientHandler implements TicTacHandler{
      *****************************************************************/
     public TicTacClientHandler(String hostName, int hostPort) throws Exception{
         this.client = new TicTacClient();
+        client.StartClient(hostPort, hostName, this);
         this.game = new TicTacLogic(3, true);
         this.board = new TicTacBoard(this);
-        client.StartClient(hostPort, hostName, this);
+
 
     }
 
@@ -62,8 +63,9 @@ public class TicTacClientHandler implements TicTacHandler{
      * Method for when the client receives a reset command
      *****************************************************************/
     public void ResetGame(){
-        game.ResetBoard();
+        System.out.println("Have i received the servers request?");
         board.resetGame();
+        game.ResetBoard();
     }
 
     /*****************************************************************
@@ -74,31 +76,15 @@ public class TicTacClientHandler implements TicTacHandler{
         int result = game.HasWon();
         if(game.HasWon() != -1) {
             if(result == 0) {
-                winMessage("Poggers my doggy", "You WON");
+                board.hasWinner("Poggers my doggy", "You WON");
             }
             if(result == 1){
-                winMessage("You lost, don't tell, but the host cheated (shhhh)", "You LOST");
+                board.hasWinner("You lost, don't tell, but the host cheated (shhhh)", "You LOST");
             }
-
             if(result == 2)
-                winMessage("ISSA DRAW, uWu!!!!!! :)", "WOWWZA NO WAY THATS CRAZY");
+                board.hasWinner("ISSA DRAW, uWu!!!!!! :)", "WOWWZA NO WAY THATS CRAZY");
         }
     }
 
-    private void winMessage(String message, String title){
-
-        Object[] buttons = {"Play Again", "Quit"};
-        int choice = JOptionPane.showOptionDialog(null, message, title,
-                JOptionPane.INFORMATION_MESSAGE, 1,null, buttons, buttons[0]);
-        System.out.println(choice);
-
-        if(choice == 0){
-            Reset();
-        }
-        else{
-            board.manualQuit();
-        }
-
-    }
 
 }
