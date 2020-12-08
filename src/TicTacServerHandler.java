@@ -16,7 +16,7 @@ public class TicTacServerHandler implements TicTacHandler{
     public TicTacServerHandler(int port) throws Exception {
         this.server = new TicTacServer();
         this.game = new TicTacLogic(3, true);
-        this.board = new TicTacBoard(this);
+        this.board = new TicTacBoard(this, "X");
         StartServer(port);
     }
 
@@ -40,7 +40,12 @@ public class TicTacServerHandler implements TicTacHandler{
             SetPlayer = true;
         else
             SetPlayer = false;
-        System.out.println(player);
+        if (SetPlayer)
+            System.out.println("Host Goes First");
+        else
+            System.out.println("Guest Goes First");
+
+
         server.SendPlayer(SetPlayer);
         game.SetCurrentPlayer(SetPlayer);
     }
