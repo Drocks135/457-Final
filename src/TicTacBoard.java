@@ -231,23 +231,38 @@ public class TicTacBoard extends JFrame {
     }
 
     //Function to determine if there is a winner or not
-    public void hasWinner(String message, String title){
-        Object[] buttons = { "Play Again", "Quit"};
+    public void hasWinner(String message, String title, int loser){
 
         frame = new JFrame("Frame");
         frame.setVisible(true);
 
+        if(loser == 0) {
+            Object[] buttons = {"Play Again", "Quit"};
 
-        jop = new JOptionPane();
 
-        int choice = jop.showOptionDialog(frame, message, title,
-                JOptionPane.INFORMATION_MESSAGE, 1,null, buttons, buttons[0]);
 
-        if(choice == 0){
-            handler.Reset();
+            jop = new JOptionPane();
+
+            int choice = jop.showOptionDialog(frame, message, title,
+                    JOptionPane.INFORMATION_MESSAGE, 1, null, buttons, buttons[0]);
+
+            if (choice == 0) {
+                handler.Reset();
+            } else if (choice == 1) {
+                System.exit(0);
+            }
         }
-        else if(choice == 1){
-            System.exit(0);
+
+        else if(loser == 1){
+            jop = new JOptionPane();
+
+            String a = title + ". Waiting for other player";
+
+            jop.showMessageDialog(frame, a);
+        }
+        else{
+            jop.showMessageDialog(frame, message);
+            handler.Reset();
         }
     }
 }

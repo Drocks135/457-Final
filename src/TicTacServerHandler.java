@@ -80,14 +80,14 @@ public class TicTacServerHandler implements TicTacHandler{
         int result = game.HasWon();
         if(game.HasWon() != -1) {
             if(result == 0) {
-                board.hasWinner("Get rekt nerd", "You LOST");
+                board.hasWinner("Get rekt nerd", "You LOST", 1);
             }
             if(result == 1){
-                board.hasWinner("Poggers my doggy", "You WON");
+                board.hasWinner("Poggers my doggy", "You WON", 0);
             }
 
             if(result == 2){
-                board.hasWinner("ISSA DRAW, uWu!!!!!! :)", "WOWWZA NO WAY THATS CRAZY");
+                board.hasWinner("ISSA DRAW, uWu!!!!!! :)", "WOWWZA NO WAY THATS CRAZY", -1);
             }
         }
     }
