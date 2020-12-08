@@ -16,8 +16,6 @@ public class TicTacClientHandler implements TicTacHandler{
         client.StartClient(hostPort, hostName, this);
         this.game = new TicTacLogic(3, true);
         this.board = new TicTacBoard(this);
-
-
     }
 
     /*****************************************************************
