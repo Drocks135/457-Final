@@ -65,12 +65,12 @@ public class TicTacBoard extends JFrame {
     * @param handler
     *
     ***************************************************************************************/
-    public TicTacBoard(TicTacHandler handler) {
+    public TicTacBoard(TicTacHandler handler, String me) {
         super();
         //Code below just sets up the GUI and initializes variables
         gamePane =  this.getContentPane();
         gamePane.setLayout(new GridLayout(boardSize,boardSize));
-        setTitle("Tic Tac Toe");
+        setTitle("Tic Tac Toe " + me);
         setSize(800,800); //Resolution
         setResizable(false); //Set Resizability
         setDefaultCloseOperation(EXIT_ON_CLOSE); //Control closing of application

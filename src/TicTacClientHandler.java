@@ -15,13 +15,17 @@ public class TicTacClientHandler implements TicTacHandler{
         this.client = new TicTacClient();
         client.StartClient(hostPort, hostName, this);
         this.game = new TicTacLogic(3, true);
-        this.board = new TicTacBoard(this);
+        this.board = new TicTacBoard(this, "O");
     }
 
     /*****************************************************************
      * Sets the client logic to the received player
      *****************************************************************/
     public void SetPlayer(Boolean setPlayer){
+        if (setPlayer)
+            System.out.println("Host Goes First");
+        else
+            System.out.println("Guest Goes First");
         game.SetCurrentPlayer(setPlayer);
     }
 
@@ -61,7 +65,7 @@ public class TicTacClientHandler implements TicTacHandler{
      * Method for when the client receives a reset command
      *****************************************************************/
     public void ResetGame(){
-        System.out.println("Have i received the servers request?");
+        //System.out.println("Have i received the servers request?");
         board.resetGame();
         game.ResetBoard();
     }

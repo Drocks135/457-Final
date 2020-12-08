@@ -129,7 +129,7 @@ public class TicTacLogic {
     private void SwitchPlayer(){
         if (CurrentPlayer) { CurrentPlayer = false; }
         else { CurrentPlayer = true; }
-        System.out.println("Player switched, cur player: " + CurrentPlayer);
+        //System.out.println("Player switched, cur player: " + CurrentPlayer);
     }
 
     public Boolean GetCurrentPlayer(){
